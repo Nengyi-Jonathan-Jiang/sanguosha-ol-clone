@@ -1,3 +1,2 @@
 # sanguosha-ol-clone
-三国杀 ol clone
-lol
+clone of 三国杀 ol
