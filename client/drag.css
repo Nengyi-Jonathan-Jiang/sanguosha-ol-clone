@@ -8,11 +8,6 @@
 }
 .draggable{
   position:absolute;
-  width: 100px;
-  height: 100px;
-  background-color: rgb(245, 230, 99);
-  border: 10px solid rgba(136, 136, 136, .5);
-  border-radius: 50%;
   touch-action: none;
   user-select: none;
 }
