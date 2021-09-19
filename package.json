@@ -1,0 +1,15 @@
+{
+  "name": "pakage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kaldis",
+  "license": "ISC",
+  "dependencies": {
+    "express": "latest",
+    "socket.io": "latest"
+  }
+}
