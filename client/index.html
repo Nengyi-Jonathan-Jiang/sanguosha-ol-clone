@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Multiplayer Game Example</title>
+		<link rel="stylesheet" type="text/css" href="/client/style.css">
+    </head>
+    <body>
+
+		<div id="top-div" style="display:none">
+			<span id="nameDisplay"></span>
+			<span id="info"></span>
+		</div>
+
+		<div id="pre-game"><div id="enterName"><span>Enter Your Name:</span><input id="name" type="text"></input></div><div id="Games" style="display:none"><span>Join A Game</span><div id="gameList"><span>[None]</span></div><span> Or create your own </span><input id="createGameName" type="text"></input></div><div id="players" style="display:none"><div><span>Players in your game: </span></div><div id="playersList"></div><button id="gameStart">Start Game</button></div></div>
+
+		<!-- <div id="main" style="display:none"> -->
+		<div id="main">
+			<div class="player-list">
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-health">Health:5</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+			</div>
+		</div>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script type="text/javascript" src="/client/client.js"></script>
+    </body>
+</html>
