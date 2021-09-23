@@ -1,0 +1,52 @@
+#players-check{
+	display:block;width:10px;height:10px;background-color:red;
+}
+
+div.playerTable{
+	flex: none;
+	touch-action: none;
+	user-select: none;
+	width:96vh;
+	height:var(--innerHeight);
+	background-color: #333;
+	border-radius: 48vh;
+	--total-players: 10;
+	margin-right:1vw;
+}
+div.playerTable[data-num-players="4"]{--total-players:4;}
+div.playerTable[data-num-players="5"]{--total-players:5;}
+div.playerTable[data-num-players="6"]{--total-players:6;}
+div.playerTable[data-num-players="7"]{--total-players:7;}
+div.playerTable[data-num-players="8"]{--total-players:8;}
+div.playerTable[data-num-players="9"]{--total-players:9;}
+
+div.playerTable>div.player{
+	--size: 50vh;
+	touch-action: none;
+	user-select: none;
+	position: absolute;
+	top:   calc(50vh - (var(--size) / var(--total-players)));
+	left:  calc(50vh - (var(--size) / var(--total-players)));
+	width:  calc((2 * var(--size)) / var(--total-players));
+	height: calc((2 * var(--size)) / var(--total-players));
+	background-color: #F00;
+	border-radius: calc(var(--size) / var(--total-players));
+	--child-number: 9;
+	--rotation: calc((var(--child-number) / var(--total-players)) * 1turn);
+	transform: rotate(var(--rotation)) translateY(-25vh) rotate(calc(-1 * var(--rotation)));
+	text-align: center;
+}
+
+div.playerTable>div.player[data-self="true"]{
+	background-color: #FA0;
+}
+
+div.playerTable>div.player:nth-child(1){--child-number:0;}
+div.playerTable>div.player:nth-child(2){--child-number:1;}
+div.playerTable>div.player:nth-child(3){--child-number:2;}
+div.playerTable>div.player:nth-child(4){--child-number:3;}
+div.playerTable>div.player:nth-child(5){--child-number:4;}
+div.playerTable>div.player:nth-child(6){--child-number:5;}
+div.playerTable>div.player:nth-child(7){--child-number:6;}
+div.playerTable>div.player:nth-child(8){--child-number:7;}
+div.playerTable>div.player:nth-child(9){--child-number:8;}

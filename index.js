@@ -1,4 +1,4 @@
-const express = require('express'), app = express(), serv = require('http').Server(app);
+const express = require('express'), app = express(), serv = require('http').createServer(app);
 app.get('/',(req, res)=>res.sendFile(__dirname + '/client/index.html'));
 app.use('/client',express.static(__dirname + '/client'));
 app.use('/files',express.static(__dirname));

@@ -1,0 +1,71 @@
+#cards-check{
+	display:block;width:10px;height:10px;background-color:green;
+}
+
+
+div.cardList{
+	background-color: #333;
+	border-radius: 2vw;
+	padding-top:1vw;
+	display: flex;
+    flex-direction: row;
+	flex-wrap:wrap;
+    justify-content: center;
+    align-items: flex-start;
+  	touch-action: none;
+	overflow-y:auto;
+	height: calc(var(--innerHeight) - 2vw);
+}
+div.card{
+	--margin-side: .8vw;
+	--margin:      1vw;
+	--border-width: .1vw;
+	--translation-x: 0px;
+	--translation-y: 0px;
+
+	position:relative;
+	touch-action: none;
+	user-select: none;
+	display:inline-block;
+	font-size: 1vw;
+	font-family: 'Courier New', Courier, monospace;
+	width:8.95vw; height:12vw;
+	background-color:rgb(175, 166, 127);
+	border-style: solid;
+	border-width: var(--border-width);
+	border-color: black;
+	padding:.5vw;
+	margin: calc(var(--margin) - var(--border-width));
+	margin-left:calc(var(--margin-side) - var(--border-width));
+	margin-right:calc(var(--margin-side) - var(--border-width));
+	transform: translate(var(--translation-x),var(--translation-y));
+}
+@keyframes card-glow{
+	  0% {border-color:rgb( 50, 100, 200);}
+	 50% {border-color:rgb(  0, 150, 100);}
+    100% {border-color:rgb(  0, 200,   0);}
+}
+div.card[data-disabled="false"]{
+	background-color:#EEE8CC;
+
+	--border-width: .25vw;
+	
+	animation-duration: 1s;
+  	animation-name: card-glow;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+div.card[data-disabled="false"]:hover{
+	--border-width:.5vw;
+
+	animation: none;
+	border-color:red;
+}
+div.card[data-disabled="false"]:active{
+	z-index: 100;
+}
+div.card[data-on-target="true"]{
+	transform: translate(var(--translation-x),var(--translation-y)) scale(0.9);
+	--border-width: 0px;
+}

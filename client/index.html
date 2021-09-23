@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Multiplayer Game Example</title>
+        <title>三国杀 ol clone</title>
 		<link rel="stylesheet" type="text/css" href="/client/style.css">
+		<link rel="stylesheet" type="text/css" href="/client/players.css">
+		<link rel="stylesheet" type="text/css" href="/client/cards.css">
     </head>
     <body>
 
@@ -15,56 +17,31 @@
 
 		<!-- <div id="main" style="display:none"> -->
 		<div id="main">
-			<div class="player-list">
+			<div class="playerTable" data-num-players="4">
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-name tooltip-cutoff" data-text="Player 1"></span>
 					<span class="player-health">Health:5</span>
 					<span class="player-nCards">Cards: 5</span>
 				</div>
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-name tooltip-cutoff" data-text="Player 2"></span>
 					<span class="player-health">Health:5</span>
 					<span class="player-nCards">Cards: 5</span>
 				</div>
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-name tooltip-cutoff" data-text="Player 3"></span>
 					<span class="player-health">Health:5</span>
 					<span class="player-nCards">Cards: 5</span>
 				</div>
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1 (I am da supacalifragilisticexpealladocious king)"></span>
+					<span class="player-name tooltip-cutoff" data-text="Player 4"></span>
 					<span class="player-health">Health:5</span>
 					<span class="player-nCards">Cards: 5</span>
 				</div>
 			</div>
 		</div>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="/client/client.js"></script>
     </body>
 </html>

@@ -185,7 +185,7 @@ let NAME = "", ROLE = "";
 		}
 		socket.on("startGame",role=>{
 			ROLE = role;
-			mainDiv.style.setProperty("display","initial");
+			mainDiv.style.setProperty("display","flex");
 			playersDiv.style.setProperty("display","none");
 			socket.clearEvent("updatePlayerList")
 			socket.clearEvent("startGame")
