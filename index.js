@@ -1,5 +1,6 @@
 const express = require('express'), app = express(), serv = require('http').createServer(app);
 app.get('/',(req, res)=>res.sendFile(__dirname + '/client/index.html'));
+// app.get('/',(req, res)=>res.sendFile(__dirname + '/client/ui-testing/index.html'));
 app.use('/client',express.static(__dirname + '/client'));
 app.use('/files',express.static(__dirname));
 serv.listen(process.env.PORT);
@@ -65,7 +66,8 @@ class Game{
 				console.log(this.currPlayer.name + "'s turn");
 				while(card = await this.currPlayer.requestCard(
 					//[...Card.cards.keys()].join("|")
-					"Kill"
+					// "Kill"
+					"杀"
 				)){
 					console.log(this.currPlayer.name,"played card",card);
 				}
@@ -303,81 +305,81 @@ class Card{
 	static cards = new Map();
 }
 
-// {// Add all cards
+{// Add all cards
 
-// 	//基本牌
-// 	Card.addCard("杀", "使对手受到1点伤害",
-// 		async (game,origin,target)=>{
-// 			if(!(await target.requestSpecificCard("闪"))) target.damage()
-// 		}
-// 	,30)
-// 	Card.addCard("闪", "当受到【杀】的攻击时，可以使用一张【闪】来抵消【杀】的效果", ()=>{},15)
-// 	Card.addCard("桃", "在出牌阶段，可以使用它来回复1点体力",
-// 		(game,origin,target)=>{target.heal()}
-// 	,8)
-// 	//锦囊牌
-
-// 	Card.addCard(
-// 		"锦囊/决斗",
-// 		"对首先不出【杀】的一方造成1点伤害，而另一方视为此伤害的来源。 　使用【决斗】有可能让自己受伤。",
-// 		async (game,origin,target)=>{
-// 			while(await game.requestSpecificCard(target,"杀")) [origin,target] = [target,origin];
-// 			target.damage();
-// 		}
-// 	,3)
-// 	Card.addCard("锦囊/无懈可击", "在目标锦囊生效前，抵消其对一名角色产生的效果。", ()=>{},4)
-// 	Card.addCard(
-// 		"锦囊/过河拆桥", 
-// 		"出牌阶段，对除自己外任意一名角色使用。选择该角色的一张手牌（随机选一张）或装备，该角色弃置这张牌。",
-// 		async (game,origin,target)=>{
-// 			await target.requestRemoveCard()
-// 		}
-// 	,6)
-// 	Card.addCard(
-// 		"锦囊/顺手牵羊", 
-// 		"出牌阶出牌阶段，对除自己以外，距离1以内的一名角色使用。选择并获得该角色的一张手牌（随机选一张）或装备。",
-// 		async (game,origin,target)=>{
-// 			await target.requestTransferCard(origin);
-// 		}
-// 	,5)
-// }
-{	//Add all cards
-	//Basic cards
-	Card.addCard("Kill", "Damage a player no further than 1 distance away for 1 health point",
+	//基本牌
+	Card.addCard("杀", "使对手受到1点伤害",
 		async (game,origin,target)=>{
-			if(!(await target.requestSpecificCard("Dodge"))) target.damage()
+			if(!(await target.requestSpecificCard("闪"))) target.damage()
 		}
 	,30)
-	Card.addCard("Dodge", "When【Kill】is used against you, cancels the effect of【Kill】", ()=>{},15)
-	Card.addCard("Eat", "Regenerate 1 health",
+	Card.addCard("闪", "当受到【杀】的攻击时，可以使用一张【闪】来抵消【杀】的效果", ()=>{},15)
+	Card.addCard("桃", "在出牌阶段，可以使用它来回复1点体力",
 		(game,origin,target)=>{target.heal()}
 	,8)
 	//锦囊牌
 
 	Card.addCard(
-		"/Fight",
-		"The first player unable to play【Kill】is damagd for 1 health point",
+		"锦囊/决斗",
+		"对首先不出【杀】的一方造成1点伤害，而另一方视为此伤害的来源。 　使用【决斗】有可能让自己受伤。",
 		async (game,origin,target)=>{
-			while(await game.requestSpecificCard(target,"Kill")) [origin,target] = [target,origin];
+			while(await game.requestSpecificCard(target,"杀")) [origin,target] = [target,origin];
 			target.damage();
 		}
 	,3)
-	Card.addCard("/Impeccable", "Cancel the effect of any Tactic card. Can be used on anybody", ()=>{},4)
+	Card.addCard("锦囊/无懈可击", "在目标锦囊生效前，抵消其对一名角色产生的效果。", ()=>{},4)
 	Card.addCard(
-		"/Destroy", 
-		"Cause an player no further than 1 distance away to lose a randomly selected card in their hand",
+		"锦囊/过河拆桥", 
+		"出牌阶段，对除自己外任意一名角色使用。选择该角色的一张手牌（随机选一张）或装备，该角色弃置这张牌。",
 		async (game,origin,target)=>{
 			await target.requestRemoveCard()
 		}
 	,6)
 	Card.addCard(
-		"/Steal", 
-		"Cause an player no further than 1 distance away to give you a randomly selected card from their hand",
+		"锦囊/顺手牵羊", 
+		"出牌阶出牌阶段，对除自己以外，距离1以内的一名角色使用。选择并获得该角色的一张手牌（随机选一张）或装备。",
 		async (game,origin,target)=>{
 			await target.requestTransferCard(origin);
 		}
 	,5)
 }
+// {	//Add all cards
+// 	//Basic cards
+// 	Card.addCard("Kill", "Inflict 1 damage on a player in your range",
+// 		async (game,origin,target)=>{
+// 			if(!(await target.requestSpecificCard("Dodge"))) target.damage()
+// 		}
+// 	,30)
+// 	Card.addCard("Dodge", "Counteracts the effect of【Kill】when not in a duel)", ()=>{},15)
+// 	Card.addCard("Eat", "Regenerate 1 health",
+// 		(game,origin,target)=>{target.heal()}
+// 	,8)
+// 	//锦囊牌
+
+// 	Card.addCard(
+// 		"/Duel",
+// 		"The first player unable to play【Kill】is damaged for 1 health point (opponent goes first)",
+// 		async (game,origin,target)=>{
+// 			while(await game.requestSpecificCard(target,"Kill")) [origin,target] = [target,origin];
+// 			target.damage();
+// 		}
+// 	,3)
+// 	Card.addCard("/Impeccable", "Cancel the effect of any Tactic card before it takes effect. Can be used on anybody", ()=>{},4)
+// 	Card.addCard(
+// 		"/Destroy", 
+// 		"Cause an player no further than 1 distance away to lose a randomly selected card in their hand",
+// 		async (game,origin,target)=>{
+// 			await target.requestRemoveCard()
+// 		}
+// 	,6)
+// 	Card.addCard(
+// 		"/Steal", 
+// 		"Steal a random card from the hand of a player in your range",
+// 		async (game,origin,target)=>{
+// 			await target.requestTransferCard(origin);
+// 		}
+// 	,5)
+// }
 
 
 var io = require('socket.io')(serv,{});

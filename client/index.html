@@ -2,9 +2,8 @@
 <html>
     <head>
         <title>三国杀 ol clone</title>
-		<link rel="stylesheet" type="text/css" href="/client/style.css">
-		<link rel="stylesheet" type="text/css" href="/client/players.css">
-		<link rel="stylesheet" type="text/css" href="/client/cards.css">
+		<link rel="stylesheet" type="text/css" href="/client/pre-game.css">
+		<link rel="stylesheet" type="text/css" href="/client/main.css">
     </head>
     <body>
 
@@ -16,32 +15,57 @@
 		<div id="pre-game"><div id="enterName"><span>Enter Your Name:</span><input id="name" type="text"></input></div><div id="Games" style="display:none"><span>Join A Game</span><div id="gameList"><span>[None]</span></div><span> Or create your own </span><input id="createGameName" type="text"></input></div><div id="players" style="display:none"><div><span>Players in your game: </span></div><div id="playersList"></div><button id="gameStart">Start Game</button></div></div>
 
 		<!-- <div id="main" style="display:none"> -->
-		<div id="main">
-			<div class="playerTable" data-num-players="4">
+		<div id="content" style="display:none">
+			<div id="LogWrapper"><div id="Log">
+				<span class="play">Player 1 played<cardName>桃</cardName></span>
+				<span class="turn">Player 2’s Turn</span>
+				<span class="addC">Player 2 recieved 2 cards</span>
+				<span class="play">Player 2 played<cardName>锦囊/决斗</cardName>on Player 3</span>
+				<span class="play">Player 3 played<cardName>锦囊/无懈可击</cardName></span>
+				<span class="turn">Player 3’s Turn</span>
+				<span class="addC">Player 3 recieved 2 cards</span>
+				<span class="play">Player 3 played<cardName>锦囊/五谷丰登</cardName></span>
+				<span class="addC">Player 1 recieved 1 card</span>
+				<span class="addC">Player 2 recieved 1 card</span>
+				<span class="addC">Player 3 recieved 1 card</span>
+				<span class="addC">Player 4 recieved 1 card</span>
+				<span class="play">Player 3 played<cardName>锦囊/无中生有</cardName></span>
+				<span class="addC">Player 3 recieved 2 cards</span>
+				<span class="play">Player 3 played<cardName>锦囊/过河拆桥</cardName>on Player 1</span>
+				<span class="subC">Player 1 lost 1 card</span>
+				<span class="play">Player 3 played<cardName>锦囊/顺手牵羊</cardName>on Player 1</span>
+				<span class="movC">Player 1 lost 1 card to Player 3</span>
+			</div></div>
+			<div id="PlayerTableWrapper"><div id="PlayerTable" data-num-players="4">
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 1"></span>
-					<span class="player-health">Health:5</span>
+					<span class="player-name" data-text="Player 3"></span>
+					<span class="player-health">♥♥♥-</span>
+					<span class="player-nCards">Cards: 3</span>
+				</div>	
+				<div class="player">
+					<span class="player-name" data-text="Player 4" data-king="true"></span>
+					<span class="player-health">♥♥♥♥-</span>
 					<span class="player-nCards">Cards: 5</span>
 				</div>
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 2"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
+					<span class="player-name" data-text="Player 1"></span>
+					<span class="player-health">♥♥♥</span>
+					<span class="player-nCards">Cards: 2</span>
 				</div>
 				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 3"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
+					<span class="player-name" data-text="Player 2"></span>
+					<span class="player-health">♥♥--</span>
+					<span class="player-nCards">Cards: 2</span>
 				</div>
-				<div class="player">
-					<span class="player-name tooltip-cutoff" data-text="Player 4"></span>
-					<span class="player-health">Health:5</span>
-					<span class="player-nCards">Cards: 5</span>
-				</div>
-			</div>
+				</div></div>
+			<div id="CardsWrapper"><div id="Cards">
+			</div></div>
 		</div>
 
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-        <script type="text/javascript" src="/client/client.js"></script>
+	
+        <script type="text/javascript" src="/client/drag.js"></script>
+        <script type="text/javascript" src="/client/init.js"></script>
+		<script type="text/javascript" src="/client/main.js"></script>
     </body>
 </html>

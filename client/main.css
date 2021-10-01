@@ -1,0 +1,321 @@
+/* Prevent portrait orientation */
+@media only screen and (orientation: portrait){
+	body{
+		display:none;
+	}
+	html::after{
+		content:"Please make sure you are in landscape mode!";
+		display: block; position: absolute; top:50vh;left:0;
+		width:100vw; font-size: 5vw; text-align: center;
+	}
+	html{overflow:hidden;background-color:#FCC;}
+}
+
+
+/* General styles */
+
+body{
+	--section-color: #333;
+	--card-color: #F5F5DC;
+	--card-color-disabled: #AFA67F;
+	--player-color: #AAA;
+
+	font-family: 'Courier New', Courier, monospace;
+}
+
+div{display:block;--padding:.4vw;}
+
+div#content{
+	position:absolute;top:var(--padding);left:var(--padding);
+	--w:calc(100vw - (2 * var(--padding)));
+	--h:calc(90vh - (2 * var(--padding)));
+
+	width: var(--w);
+	height:var(--h);
+	--pTblW: calc(min((var(--h) * 0.8), 75vw));
+}
+div#content>div{
+	position:absolute;
+	padding:var(--padding);
+	width: calc(var(--w1) - (2 * var(--padding)));
+	height:calc(var(--h1) - (2 * var(--padding)));
+}
+
+div#content>div>div{
+	width:100%;height:100%;
+	background-color:var(--section-color);
+}
+
+div#LogWrapper{
+	top:0;left:0;
+	--w1: var(--w);
+	--h1:calc(var(--h) - var(--pTblW));
+}
+div#PlayerTableWrapper{
+	bottom:0;left:0;
+	--w1: var(--pTblW);
+	--h1: var(--pTblW);
+}
+div#CardsWrapper{
+	bottom:0;left:var(--pTblW);
+	--w1: calc(var(--w) - var(--pTblW));
+	--h1: var(--pTblW);
+}
+
+/*Scrollbars*/
+
+
+::-webkit-scrollbar{width:1vw;}
+::-webkit-scrollbar-thumb{
+	display: block;
+	background-color: slategray;
+	border-radius: .5vw;
+}
+::-webkit-scrollbar-track-piece:end {
+    background: transparent;
+    margin-bottom: .5vw;
+}
+::-webkit-scrollbar-track-piece:start {
+    background: transparent;
+    margin-top: .5vw;
+}
+
+/* Log styling */
+
+div#Log{
+	border-radius: 1vw;
+	overflow-y:auto;
+	font-size: calc(var(--h) * .02);
+	user-select: none;
+}
+div#Log>span{
+	display:block;margin-left:1vw;
+}
+
+div#Log>span:first-child{
+	margin-top:.5vw;
+}
+div#Log>span:last-child{
+	margin-bottom:.5vw;
+}
+
+div#Log>span.turn{color: #0F0;font-weight:bold;}
+div#Log>span.play{color: #48E;}
+div#Log>span.addC{color: #FA0;font-style: italic;}
+div#Log>span.subC{color: #F00;font-style: italic;}
+div#Log>span.movC{color: #F70;font-style: italic;}
+
+
+/* Cards list styling */
+
+div#Cards{
+	border-radius: 1vw;
+	display: flex;
+    flex-direction: row;
+	flex-wrap:wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+	overflow-y:auto;
+	overflow-x:hidden;
+	height: calc(var(--innerHeight) - 2vw);
+}
+
+div.card{
+	--margin-side: .8vw;
+	--margin:      1vw;
+	--border-width: .1vw;
+	--translation-x: 0;
+	--translation-y: 0;
+
+	position:relative;
+	touch-action: none;
+	user-select: none;
+	width:8.95vw; height:12vw;
+	background-color:var(--card-color-disabled);
+	border-style: solid;
+	border-width: var(--border-width);
+	border-color: black;
+	padding:.5vw;
+	margin-top:    calc(var(--margin) - var(--border-width));
+	margin-bottom: calc(var(--margin) - var(--border-width));
+	margin-left:   calc(var(--margin-side) - var(--border-width));
+	margin-right:  calc(var(--margin-side) - var(--border-width));
+	transform: translate(var(--translation-x),var(--translation-y));
+	
+}
+
+div.card>cardName {
+    font-size: 1.16vw;
+    position: absolute;
+    top: var(--padding);
+}
+
+cardName::before{content:"【";}
+cardName::after {content:"】";}
+
+div.card>cardName::before{margin-left:-0.58vw;}
+div.card>cardName::after {position:absolute;}
+
+div.card>span.line {
+    display: block;
+    width: 100%;
+    height: .05vw;
+    background-color: black;
+    top: calc(var(--padding) + 1.16vw);
+    position: relative;
+}
+
+div.card>span.card-description {
+    font-size: 1.06vw;
+    position: absolute;
+    top: calc(3 * var(--padding) + 1.16vw);
+}
+div.card>span.card-description>cardName::before{margin-left:-0.45vw;margin-right:-0.08vw;}
+div.card>span.card-description>cardName::after{margin-right:-0.45vw;margin-left :-0.08vw;}
+
+
+
+
+@keyframes card-glow{
+	  0% {border-color:rgb( 50, 100, 200);}
+	 50% {border-color:rgb(  0, 150, 100);}
+    100% {border-color:rgb(  0, 200,   0);}
+}
+div.card[data-disabled="false"]{
+	background-color: var(--card-color);
+
+	--border-width: .25vw;
+	
+	animation-duration: 1s;
+  	animation-name: card-glow;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+div.card[data-disabled="false"]:hover{
+	--border-width:.5vw;
+
+	animation: none;
+	border-color:red;
+}
+div.card[data-disabled="false"]:active{
+	z-index: 100;
+}
+div.card[data-on-target="true"]{
+	transform: translate(var(--translation-x),var(--translation-y)) scale(0.9);
+	--border-width: 0;
+}
+
+/* Player Table styling */
+
+div#PlayerTable{
+	z-index: -10;
+	flex: none;
+	touch-action: none;
+	user-select: none;
+	--total-players: 10;
+	margin-right:1vw;
+	border-radius: var(--h);	/*Too lazy to calculate the actual value, I'll go with an upper bound*/
+}
+div#PlayerTable[data-num-players="4"]{--total-players:4;}
+div#PlayerTable[data-num-players="5"]{--total-players:5;}
+div#PlayerTable[data-num-players="6"]{--total-players:6;}
+div#PlayerTable[data-num-players="7"]{--total-players:7;}
+div#PlayerTable[data-num-players="8"]{--total-players:8;}
+div#PlayerTable[data-num-players="9"]{--total-players:9;}
+
+div#PlayerTable>div.player{
+	--r: calc(50vh / var(--total-players));
+	touch-action: none;
+	user-select: none;
+	position: absolute;
+	top:   calc((var(--pTblW) / 2) - var(--r));
+	left:  calc((var(--pTblW) / 2) - var(--r));
+
+	border: .1vw solid black;
+
+	width:  calc(2 * var(--r));
+	height: calc(2 * var(--r));
+	background-color: var(--player-color);
+	border-radius: var(--r);
+
+	--child-number: 9;
+	--rotation: calc((var(--child-number) / var(--total-players)) * 1turn);
+	--distance: calc(var(--pTblW) * 0.5 - var(--r) - 2 * var(--padding));
+
+	transform: rotate(var(--rotation)) translateY(calc(-1 * var(--distance))) rotate(calc(-1 * var(--rotation)));
+	text-align: center;
+}
+div#PlayerTable>div.player[data-king="true"]{
+	--r: calc(50vh / var(--total-players));
+	touch-action: none;
+	user-select: none;
+	position: absolute;
+	top:   calc((var(--pTblW) / 2) - var(--r));
+	left:  calc((var(--pTblW) / 2) - var(--r));
+
+	border: 1vw solid black;
+
+	width:  calc(2 * var(--r));
+	height: calc(2 * var(--r));
+	background-color: var(--player-color);
+	border-radius: var(--r);
+	--rotation: calc((var(--child-number) / var(--total-players)) * 1turn);
+	--distance: calc(var(--pTblW) * 0.5 - var(--r) - 2 * var(--padding));
+
+	transform: rotate(var(--rotation)) translateY(calc(-1 * var(--distance))) rotate(calc(-1 * var(--rotation)));
+	text-align: center;
+}
+
+div#PlayerTable>div.player:nth-child(1){--child-number:0;}
+div#PlayerTable>div.player:nth-child(2){--child-number:1;}
+div#PlayerTable>div.player:nth-child(3){--child-number:2;}
+div#PlayerTable>div.player:nth-child(4){--child-number:3;}
+div#PlayerTable>div.player:nth-child(5){--child-number:4;}
+div#PlayerTable>div.player:nth-child(6){--child-number:5;}
+div#PlayerTable>div.player:nth-child(7){--child-number:6;}
+div#PlayerTable>div.player:nth-child(8){--child-number:7;}
+div#PlayerTable>div.player:nth-child(9){--child-number:8;}
+
+div#PlayerTable>div.player>span{display: block}
+
+div#PlayerTable>div.player>span.player-name{
+	margin-top:calc(var(--r) * .3);
+	margin-left:calc(var(--r) * .25);
+	position: relative;
+	width: calc(var(--r) * 1.5);
+}
+div#PlayerTable>div.player>span.player-name:hover::after {
+  content: attr(data-text);
+  position: absolute;
+  background: #eee;
+  text-align: center;
+  top: 1.5vw;
+  left: 1.5vw;
+  border: .05vw solid black;
+  padding: .2vw;
+  display: block;
+  white-space: nowrap;
+  animation-name: tooltip-delay;
+  animation-duration: .5s;
+  font-size: calc(var(--r) * .2);
+}
+@keyframes tooltip-delay {0%{opacity:0%}75%{opacity:0%}100%{opacity:100%}}
+div#PlayerTable>div.player>span.player-name::before {
+  content: attr(data-text);
+  display: block;
+  width: calc(var(--r) * 1.5);
+  overflow-x: hidden;
+  white-space: nowrap;
+  border-bottom: .01vw dashed #000;
+  font-size: calc(var(--r) * .3);
+}
+
+div#PlayerTable>div.player>span.player-health{
+	font-size: calc(var(--r) * .6);
+	margin-top: -.5vw;
+	margin-bottom: -.8vw;
+}
+div#PlayerTable>div.player>span.player-nCards{
+	font-size: calc(var(--r) * .3);
+}

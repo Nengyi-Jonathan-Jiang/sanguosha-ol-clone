@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>UI TEST</title>
+		<link rel="stylesheet" type="text/css" href="/client/ui-testing/style.css">
+    </head>
+	<body><div id="content">
+			<div id="LogWrapper"><div id="Log">
+				<span class="play">Player 1 played<cardName>桃</cardName></span>
+				<span class="turn">Player 2’s Turn</span>
+				<span class="addC">Player 2 recieved 2 cards</span>
+				<span class="play">Player 2 played<cardName>锦囊/决斗</cardName>on Player 3</span>
+				<span class="play">Player 3 played<cardName>锦囊/无懈可击</cardName></span>
+				<span class="turn">Player 3’s Turn</span>
+				<span class="addC">Player 3 recieved 2 cards</span>
+				<span class="play">Player 3 played<cardName>锦囊/五谷丰登</cardName></span>
+				<span class="addC">Player 1 recieved 1 card</span>
+				<span class="addC">Player 2 recieved 1 card</span>
+				<span class="addC">Player 3 recieved 1 card</span>
+				<span class="addC">Player 4 recieved 1 card</span>
+				<span class="play">Player 3 played<cardName>锦囊/无中生有</cardName></span>
+				<span class="addC">Player 3 recieved 2 cards</span>
+				<span class="play">Player 3 played<cardName>锦囊/过河拆桥</cardName>on Player 1</span>
+				<span class="subC">Player 1 lost 1 card</span>
+				<span class="play">Player 3 played<cardName>锦囊/顺手牵羊</cardName>on Player 1</span>
+				<span class="movC">Player 1 lost 1 card to Player 3</span>
+			</div></div>
+			<div id="PlayerTableWrapper"><div id="PlayerTable" data-num-players="4">
+				<div class="player">
+					<span class="player-name" data-text="Player 3"></span>
+					<span class="player-health">♥♥♥-</span>
+					<span class="player-nCards">Cards: 3</span>
+				</div>	
+				<div class="player">
+					<span class="player-name" data-text="Player 4" data-king="true"></span>
+					<span class="player-health">♥♥♥♥-</span>
+					<span class="player-nCards">Cards: 5</span>
+				</div>
+				<div class="player">
+					<span class="player-name" data-text="Player 1"></span>
+					<span class="player-health">♥♥♥</span>
+					<span class="player-nCards">Cards: 2</span>
+				</div>
+				<div class="player">
+					<span class="player-name" data-text="Player 2"></span>
+					<span class="player-health">♥♥--</span>
+					<span class="player-nCards">Cards: 2</span>
+				</div>
+				</div></div>
+			<div id="CardsWrapper"><div id="Cards">
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/过河拆桥</cardName>
+					<span class="line"></span>
+					<span class="card-description">出牌阶段，对除自己外任意一名角色使用。选择该角色的一张手牌（随机选一张）或装备，该角色弃置这张牌。</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>桃</cardName>
+					<span class="line"></span>
+					<span class="card-description">在出牌阶段，可以使用它来回复1点体力</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>桃</cardName>
+					<span class="line"></span>
+					<span class="card-description">在出牌阶段，可以使用它来回复1点体力</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/无懈可击</cardName>
+					<span class="line"></span>
+					<span class="card-description">在目标锦囊生效前，抵消其对一名角色产生的效果。</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/过河拆桥</cardName>
+					<span class="line"></span>
+					<span class="card-description">出牌阶段，对除自己外任意一名角色使用。选择该角色的一张手牌（随机选一张）或装备，该角色弃置这张牌。</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/过河拆桥</cardName>
+					<span class="line"></span>
+					<span class="card-description">出牌阶段，对除自己外任意一名角色使用。选择该角色的一张手牌（随机选一张）或装备，该角色弃置这张牌。</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/决斗</cardName>
+					<span class="line"></span>
+					<span class="card-description">对首先不出<cardName>杀</cardName>的一方造成1点伤害，而另一方视为此伤害的来源。 　使用<cardName>决斗</cardName>有可能让自己受伤。</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>桃</cardName>
+					<span class="line"></span>
+					<span class="card-description">在出牌阶段，可以使用它来回复1点体力</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>桃</cardName>
+					<span class="line"></span>
+					<span class="card-description">在出牌阶段，可以使用它来回复1点体力</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>闪</cardName>
+					<span class="line"></span>
+					<span class="card-description">当受到<cardName>杀</cardName>的攻击时，可以使用一张<cardName>闪</cardName>来抵消<cardName>杀</cardName>的效果</span>
+				</div>
+				<div class="card" data-disabled="true">
+					<cardName>锦囊/顺手牵羊</cardName>
+					<span class="line"></span>
+					<span class="card-description">出牌阶出牌阶段，对除自己以外，距离1以内的一名角色使用。选择并获得该角色的一张手牌（随机选一张）或装备。</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+				<div class="card" data-disabled="false">
+					<cardName>杀</cardName>
+					<span class="line"></span>
+					<span class="card-description">使对手受到1点伤害</span>
+				</div>
+			</div></div>
+		</div>
+	</body>
+</html>

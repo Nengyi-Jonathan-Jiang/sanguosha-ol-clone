@@ -1,0 +1,20 @@
+input{
+  font-family: inherit;
+  font-size: 100%;
+}
+
+#pre-game input[type="text"]{
+	outline:none;
+	border:none;
+	border-bottom:1px solid black;
+}
+
+#top-div{
+	position: absolute;
+	background-color: #CCC8;
+}
+
+#nameDisplay,#Games:first-child,#gameList>span{
+	border-bottom:1px solid black;
+	display: block;width:100%;
+}
