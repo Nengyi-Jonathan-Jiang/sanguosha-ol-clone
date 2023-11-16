@@ -21,7 +21,21 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 public abstract class Server {
-    private static final Map<String, String> MIMETypes = Map.of("html", "text/html", "js", "text/javascript", "css", "text/css", "jpg", "image/jpeg", "png", "image/png", "ico", "image/x-icon", "json", "application/json");
+    private static final Map<String, String> MIMETypes = Map.of(
+        "html", "text/html",
+        "js", "text/javascript",
+        "css", "text/css",
+
+        "jpg", "image/jpeg",
+        "png", "image/png",
+        "ico", "image/x-icon",
+        "svg", "image/svg+xml",
+
+        "ttf", "font/ttf",
+        "otf", "font/otf",
+
+        "json", "application/json"
+    );
 
     protected final WebSocketServer wsServer;
     protected final HttpServer server;
@@ -37,18 +51,18 @@ public abstract class Server {
     private void registerEventHandlers() {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
-            if (method.isAnnotationPresent(On.class)) {
-                String eventName = method.getAnnotation(On.class).eventName();
+            if (method.isAnnotationPresent(OnEvent.class)) {
+                String eventName = method.getAnnotation(OnEvent.class).eventName();
 
                 Class<?>[] types = method.getParameterTypes();
-                if (types.length != 2 || !types[0].isAssignableFrom(WebSocket.class) || !types[1].isAssignableFrom(JsonObject.class)) {
-                    throw new RuntimeException(new NoSuchMethodException("Event handlers must have the signature (WebSocket, JSONObject)"));
+                if (types.length != 2 || !types[0].isAssignableFrom(Socket.class) || !types[1].isAssignableFrom(JsonObject.class)) {
+                    throw new RuntimeException(new NoSuchMethodException("Event handlers must have the signature (Socket, JSONObject)"));
                 }
 
                 handlers.put(eventName, ((socket, data) -> {
                     try {
                         method.setAccessible(true);
-                        method.invoke(this, socket, data);
+                        method.invoke(this, new Socket(socket), data);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -74,12 +88,14 @@ public abstract class Server {
         }
     }
 
-    protected void broadcast(String message) {
-        wsServer.broadcast(message);
+    protected void broadcast(String eventName, JsonObject eventData) {
+        emitTo(wsServer.getConnections().stream().map(Socket::new).toList(), eventData, eventName);
     }
 
-    protected void broadcast(String message, Collection<WebSocket> sockets) {
-        wsServer.broadcast(message, sockets);
+    protected void emitTo(Collection<Socket> sockets, JsonObject eventData, String eventName) {
+        for(Socket s : sockets) {
+            s.emitEvent(eventName, eventData);
+        }
     }
 
     private void tryRunHandler(String eventName, WebSocket socket, JsonObject eventData) {

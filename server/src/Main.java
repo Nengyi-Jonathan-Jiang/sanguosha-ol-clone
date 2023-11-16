@@ -1,7 +1,7 @@
 import com.google.gson.JsonObject;
-import org.java_websocket.WebSocket;
-import wrapper.On;
+import wrapper.OnEvent;
 import wrapper.Server;
+import wrapper.Socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,15 +14,15 @@ public class Main {
 
         Server s = new Server(port, wsPort) {
 
-            @On(eventName = "open")
-            public void onOpen(WebSocket socket, JsonObject data) {
-                System.out.println("Socket " + socket.getLocalSocketAddress() + " joined");
+            @OnEvent(eventName = "open")
+            public void onOpen(Socket socket, JsonObject data) {
+                System.out.println("Socket " + socket.id() + " joined");
             }
 
-            @On(eventName = "message")
-            public void onMessage(WebSocket socket, JsonObject data) {
-                System.out.println(data);
-                broadcast(data.toString());
+            @OnEvent(eventName = "message")
+            public void onMessage(Socket socket, JsonObject data) {
+                System.out.println("Socket " + socket.id() + " sent " + data);
+                broadcast("message", data);
             }
         };
         System.out.println("Starting server... ");
