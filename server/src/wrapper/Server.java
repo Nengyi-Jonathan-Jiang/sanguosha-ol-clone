@@ -37,8 +37,8 @@ public abstract class Server {
     private void registerEventHandlers() {
         Method[] methods = this.getClass().getMethods();
         for (Method method : methods) {
-            if (method.isAnnotationPresent(OnEvent.class)) {
-                String eventName = method.getAnnotation(OnEvent.class).eventName();
+            if (method.isAnnotationPresent(On.class)) {
+                String eventName = method.getAnnotation(On.class).eventName();
 
                 Class<?>[] types = method.getParameterTypes();
                 if (types.length != 2 || !types[0].isAssignableFrom(WebSocket.class) || !types[1].isAssignableFrom(JsonObject.class)) {
@@ -75,10 +75,6 @@ public abstract class Server {
     }
 
     protected void broadcast(String message) {
-        wsServer.broadcast(message);
-    }
-
-    protected void broadcast(ByteBuffer message) {
         wsServer.broadcast(message);
     }
 
