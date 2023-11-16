@@ -8,13 +8,19 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONML;
+import org.json.JSONMLParserConfiguration;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 public abstract class Server {
     private static final Map<String, String> MIMETypes = Map.of(
@@ -29,40 +35,10 @@ public abstract class Server {
 
     protected final WebSocketServer wsServer;
     protected final HttpServer server;
+    private final Map<String, SocketEventHandler> handlers = new HashMap<>();
 
     public Server(int port, int wsPort) {
-        this.wsServer = new WebSocketServer(new InetSocketAddress(wsPort)) {
-            @Override
-            public void onOpen(WebSocket conn, ClientHandshake handshake) {
-                Server.this.onOpen(conn);
-            }
-
-            @Override
-            public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-                Server.this.onClose(conn);
-            }
-
-            @Override
-            public void onMessage(WebSocket conn, String message) {
-                Server.this.onMessage(conn, message);
-            }
-
-            @Override
-            public void onMessage(WebSocket conn, ByteBuffer message) {
-                Server.this.onMessage(conn, message);
-            }
-
-            @Override
-            public void onError(WebSocket conn, Exception ex) {
-            }
-
-            @Override
-            public void onStart() {
-                System.out.println("Websocket server started on port " + getPort());
-                setConnectionLostTimeout(0);
-                setConnectionLostTimeout(100);
-            }
-        };
+        this.wsServer = new EventWebSocketServer(wsPort);
 
         try {
             InetSocketAddress host = new InetSocketAddress("localhost", port);
@@ -91,13 +67,26 @@ public abstract class Server {
         wsServer.broadcast(message, sockets);
     }
 
-    protected abstract void onOpen(WebSocket socket);
+    private void tryRunHandler(String eventName, WebSocket socket, JSONObject eventData) {
+        if(handlers.containsKey(eventName)) {
+            handlers.get(eventName).run(socket, eventData);
+        }
+    }
 
-    protected abstract void onClose(WebSocket socket);
+    private void onOpen(WebSocket socket) {
+        tryRunHandler("open", socket, null);
+    }
 
-    protected abstract void onMessage(WebSocket socket, String message);
+    private void onClose(WebSocket socket) {
+        tryRunHandler("close", socket, null);
+    }
 
-    protected abstract void onMessage(WebSocket socket, ByteBuffer message);
+    private void onMessage(WebSocket socket, String message) {
+        JSONObject data = new JSONObject(message);
+        String eventName = data.getString("eventName");
+        JSONObject eventData = data.getJSONObject("eventData");
+        tryRunHandler(eventName, socket, eventData);
+    }
 
     private void handleRequest(HttpExchange t) throws IOException {
         URI uri = t.getRequestURI();
@@ -156,5 +145,40 @@ public abstract class Server {
         t2.start();
         t1.join();
         t2.join();
+    }
+
+    private class EventWebSocketServer extends WebSocketServer {
+        public EventWebSocketServer(int wsPort) {
+            super(new InetSocketAddress(wsPort));
+        }
+
+        @Override
+        public void onOpen(WebSocket conn, ClientHandshake handshake) {
+            Server.this.onOpen(conn);
+        }
+
+        @Override
+        public void onClose(WebSocket conn, int code, String reason, boolean remote) {
+            Server.this.onClose(conn);
+        }
+
+        @Override
+        public void onMessage(WebSocket conn, String message) {
+            Server.this.onMessage(conn, message);
+        }
+
+        @Override
+        public void onMessage(WebSocket conn, ByteBuffer message) {}
+
+        @Override
+        public void onError(WebSocket conn, Exception ex) {
+        }
+
+        @Override
+        public void onStart() {
+            System.out.println("Websocket server started on port " + getPort());
+            setConnectionLostTimeout(0);
+            setConnectionLostTimeout(100);
+        }
     }
 }

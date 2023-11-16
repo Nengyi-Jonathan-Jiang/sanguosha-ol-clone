@@ -18,6 +18,7 @@
           wsocket = new WebSocket("ws://localhost:8081/");
           wsocket.onmessage = onMessage;
           document.getElementById("name").focus();
+
           document.getElementById("consolediv").style.visibility = 'hidden';
       }
       /* Callback function for incoming messages

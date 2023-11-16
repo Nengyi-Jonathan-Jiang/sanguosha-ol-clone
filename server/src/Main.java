@@ -1,4 +1,5 @@
 import org.java_websocket.WebSocket;
+import wrapper.OnEvent;
 import wrapper.Server;
 
 import java.io.BufferedReader;
@@ -30,6 +31,11 @@ public class Main {
 
             @Override
             protected void onMessage(WebSocket socket, ByteBuffer message) {
+
+            }
+
+            @OnEvent(eventName = "")
+            public void doSomething() {
 
             }
         };
