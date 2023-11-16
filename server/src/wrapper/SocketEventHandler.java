@@ -1,8 +1,8 @@
 package wrapper;
 
+import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
-import org.json.JSONObject;
 
 public interface SocketEventHandler {
-    void run(WebSocket socket, JSONObject data);
+    void run(WebSocket socket, JsonObject data);
 }

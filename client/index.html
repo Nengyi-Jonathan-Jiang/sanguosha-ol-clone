@@ -28,18 +28,18 @@
           var line = "";
           /* Parse the message into a JavaScript object */
           var msg = JSON.parse(evt.data);
-          if (msg.type === "chat") {
+          if (msg.eventName === "message") {
               line = msg.name + ": ";
               if (msg.target.length > 0)
                   line += "@" + msg.target + " ";
               line += msg.message + "\n";
               /* Update the chat area */
               textarea.value += "" + line;
-          } else if (msg.type === "info") {
+          } else if (msg.eventName === "info") {
               line = "[--" + msg.info + "--]\n";
               /* Update the chat area */
               textarea.value += "" + line;
-          } else if (msg.type === "users") {
+          } else if (msg.eventName === "users") {
               line = "Users:\n";
               for (var i=0; i < msg.userlist.length; i++)
                   line += "-" + msg.userlist[i] + "\n";
@@ -60,7 +60,7 @@
           if (name.value.length > 0) {
               /* Create a message as a JavaScript object */
               var joinMsg = {};
-              joinMsg.type = "join";
+              joinMsg.eventName = "join";
               joinMsg.name = name.value;
               /* Convert the message to JSON */
               jsonstr = JSON.stringify(joinMsg);
@@ -84,7 +84,7 @@
           if (evt.keyCode === 13 && input.value.length > 0) {
               /* Create a chat message as a JavaScript object */
               var chatMsg = {};
-              chatMsg.type = "chat";
+              chatMsg.eventName = "message";
               chatMsg.name = userName;
               msgstr = input.value;
               chatMsg.target = getTarget(msgstr.replace(/,/g, ""));

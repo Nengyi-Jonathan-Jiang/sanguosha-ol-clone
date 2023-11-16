@@ -1,3 +1,4 @@
+import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
 import wrapper.OnEvent;
 import wrapper.Server;
@@ -5,7 +6,6 @@ import wrapper.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -13,30 +13,16 @@ public class Main {
         int wsPort = 8081;
 
         Server s = new Server(port, wsPort) {
-            @Override
-            protected void onOpen(WebSocket socket) {
 
+            @OnEvent(eventName = "open")
+            public void onOpen(WebSocket socket, JsonObject data) {
+                System.out.println("Socket " + socket.getLocalSocketAddress() + " joined");
             }
 
-            @Override
-            protected void onClose(WebSocket socket) {
-
-            }
-
-            @Override
-            protected void onMessage(WebSocket socket, String message) {
-                System.out.println(socket.getResourceDescriptor() + " : " + message);
-                broadcast(message);
-            }
-
-            @Override
-            protected void onMessage(WebSocket socket, ByteBuffer message) {
-
-            }
-
-            @OnEvent(eventName = "")
-            public void doSomething() {
-
+            @OnEvent(eventName = "message")
+            public void onMessage(WebSocket socket, JsonObject data) {
+                System.out.println(data);
+                broadcast(data.toString());
             }
         };
         System.out.println("Starting server... ");

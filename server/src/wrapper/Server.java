@@ -3,6 +3,7 @@ package wrapper;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -10,28 +11,17 @@ import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.json.JSONML;
-import org.json.JSONMLParserConfiguration;
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
 public abstract class Server {
-    private static final Map<String, String> MIMETypes = Map.of(
-            "html", "text/html",
-            "js", "text/javascript",
-            "css", "text/css",
-            "jpg", "image/jpeg",
-            "png", "image/png",
-            "ico", "image/x-icon",
-            "json", "application/json"
-    );
+    private static final Map<String, String> MIMETypes = Map.of("html", "text/html", "js", "text/javascript", "css", "text/css", "jpg", "image/jpeg", "png", "image/png", "ico", "image/x-icon", "json", "application/json");
 
     protected final WebSocketServer wsServer;
     protected final HttpServer server;
@@ -39,16 +29,45 @@ public abstract class Server {
 
     public Server(int port, int wsPort) {
         this.wsServer = new EventWebSocketServer(wsPort);
+        this.server = startStaticFileServer(port, wsPort);
 
+        registerEventHandlers();
+    }
+
+    private void registerEventHandlers() {
+        Method[] methods = this.getClass().getMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(OnEvent.class)) {
+                String eventName = method.getAnnotation(OnEvent.class).eventName();
+
+                Class<?>[] types = method.getParameterTypes();
+                if (types.length != 2 || !types[0].isAssignableFrom(WebSocket.class) || !types[1].isAssignableFrom(JsonObject.class)) {
+                    throw new RuntimeException(new NoSuchMethodException("Event handlers must have the signature (WebSocket, JSONObject)"));
+                }
+
+                handlers.put(eventName, ((socket, data) -> {
+                    try {
+                        method.setAccessible(true);
+                        method.invoke(this, socket, data);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }));
+            }
+        }
+    }
+
+    private HttpServer startStaticFileServer(int port, int wsPort) {
         try {
             InetSocketAddress host = new InetSocketAddress("localhost", port);
-            server = HttpServer.create(host, 0);
+            HttpServer server = HttpServer.create(host, 0);
             server.createContext("/", this::handleRequest);
             server.start();
             wsServer.start();
 
             System.out.println("Server is running at http://" + host.getHostName() + ":" + port + "/");
             System.out.println("Websocket Server is running at ws://" + host.getHostName() + ":" + wsPort + "/");
+            return server;
         } catch (IOException e) {
             System.out.println("Failed to create server");
             throw new RuntimeException(e);
@@ -67,8 +86,8 @@ public abstract class Server {
         wsServer.broadcast(message, sockets);
     }
 
-    private void tryRunHandler(String eventName, WebSocket socket, JSONObject eventData) {
-        if(handlers.containsKey(eventName)) {
+    private void tryRunHandler(String eventName, WebSocket socket, JsonObject eventData) {
+        if (handlers.containsKey(eventName)) {
             handlers.get(eventName).run(socket, eventData);
         }
     }
@@ -82,9 +101,8 @@ public abstract class Server {
     }
 
     private void onMessage(WebSocket socket, String message) {
-        JSONObject data = new JSONObject(message);
-        String eventName = data.getString("eventName");
-        JSONObject eventData = data.getJSONObject("eventData");
+        JsonObject eventData = JsonParser.parseString(message).getAsJsonObject();
+        String eventName = eventData.get("eventName").getAsString();
         tryRunHandler(eventName, socket, eventData);
     }
 
@@ -168,7 +186,8 @@ public abstract class Server {
         }
 
         @Override
-        public void onMessage(WebSocket conn, ByteBuffer message) {}
+        public void onMessage(WebSocket conn, ByteBuffer message) {
+        }
 
         @Override
         public void onError(WebSocket conn, Exception ex) {
