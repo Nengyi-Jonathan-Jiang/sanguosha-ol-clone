@@ -1,27 +1,45 @@
+import org.java_websocket.WebSocket;
 import wrapper.Server;
-import wrapper.StaticFileServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
         int port = 8080;
+        int wsPort = 8081;
 
-        StaticFileServer server = new StaticFileServer(port);
-        System.out.println("Started static file server on port 8080");
+        Server s = new Server(port, wsPort) {
+            @Override
+            protected void onOpen(WebSocket socket) {
 
-        Server s = new Server(port + 1);
-        System.out.println("Starting websocket server on port " + s.getPort());
-        s.start();
+            }
+
+            @Override
+            protected void onClose(WebSocket socket) {
+
+            }
+
+            @Override
+            protected void onMessage(WebSocket socket, String message) {
+                System.out.println(socket.getResourceDescriptor() + " : " + message);
+                broadcast(message);
+            }
+
+            @Override
+            protected void onMessage(WebSocket socket, ByteBuffer message) {
+
+            }
+        };
+        System.out.println("Starting server... ");
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String input = in.readLine();
-            s.broadcast(input);
             if (input.equals("exit")) {
-                s.stop(1000);
+                s.stop();
                 break;
             }
         }

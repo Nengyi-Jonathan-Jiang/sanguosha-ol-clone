@@ -15,7 +15,7 @@
           textarea = document.getElementById("textarea");
           wsconsole = document.getElementById("wsconsole");
           userlist = document.getElementById("userlist");
-          wsocket = new WebSocket("ws://localhost:8080/websocketbot/websocketbot");
+          wsocket = new WebSocket("ws://localhost:8081/");
           wsocket.onmessage = onMessage;
           document.getElementById("name").focus();
           document.getElementById("consolediv").style.visibility = 'hidden';
