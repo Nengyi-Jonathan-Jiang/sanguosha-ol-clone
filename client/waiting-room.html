@@ -4,9 +4,89 @@
         <meta charset="UTF-8">
         <title>三国杀 | Waiting Room</title>
         <script src="socket.js"></script>
+        <style>
+            body {
+                background-color: #ccbb99;
+                margin:           0;
+                padding:          0;
+                height:           100vh;
+                display:          flex;
+                align-items:      center;
+                justify-content:  center;
+            }
+
+            h1 {
+                margin: 0 0 -5px;
+            }
+
+            div#main {
+                background-color: white;
+                height:           fit-content;
+                border-radius:    30px;
+                padding:          20px 15px;
+                text-align:       center;
+                font-size: 24px;
+                font-family: Arial, serif;
+            }
+
+            div#main div div {
+                display: flex;
+                margin-top: 15px;
+                padding-right: 15px;
+            }
+
+            div#main div div input,
+            div#main div div button {
+                flex-grow: 1;
+                margin-left: 15px;
+                background-color: inherit;
+                border: 0;
+                border-radius: 0;
+                outline: none;
+                font: inherit;
+                text-align: center;
+                padding: 3px 8px;
+            }
+
+            div#main div div input {
+                width: 130px;
+                border-bottom: 1px solid black;
+            }
+
+            div#main div div button {
+                border: 1px solid black;
+            }
+        </style>
     </head>
     <body>
-
+        <div id="main">
+            <h1>三国杀</h1>
+            <div>
+                <div>
+                    <input id="name-input" type="text" placeholder="Name (Max 20 chars)" maxlength="20" required>
+                </div>
+                <div>
+                    <input id="game-code-input" placeholder="Game Code" maxlength="5">
+                    <button id="join-game">Join Game</button>
+                </div>
+                <div>
+                    <button id="create-game">Or create new game</button>
+                </div>
+            </div>
+            <div style="display: none">
+                <div>
+                    <span>Players in game:</span>
+                </div>
+                <div id="players-list">
+                    <span> Jennifer <3 </span>
+                    <span data-you> Jonathan </span>
+                    <span> Anonymous </span>
+                </div>
+                <div>
+                    <button>Start game</button>
+                </div>
+            </div>
+        </div>
         <script>
             const socket = new Socket("ws://localhost:8081/");
         </script>
