@@ -56,12 +56,26 @@
             div#main div div button {
                 border: 1px solid black;
             }
+
+            div#players-list {
+                flex-direction: column;
+                width: 325px;
+            }
+
+            div#players-list span {
+                flex-grow: 1;
+            }
+
+            div#players-list span[data-you]::after {
+                content: "(You)";
+                color: #aaa;
+            }
         </style>
     </head>
     <body>
         <div id="main">
             <h1>三国杀</h1>
-            <div>
+            <div hidden>
                 <div>
                     <input id="name-input" type="text" placeholder="Name (Max 20 chars)" maxlength="20" required>
                 </div>
@@ -73,7 +87,7 @@
                     <button id="create-game">Or create new game</button>
                 </div>
             </div>
-            <div style="display: none">
+            <div>
                 <div>
                     <span>Players in game:</span>
                 </div>
