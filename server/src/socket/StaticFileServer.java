@@ -52,7 +52,7 @@ public class StaticFileServer {
 
     private void handleRequest(HttpExchange t) throws IOException {
         URI uri = t.getRequestURI();
-        if (uri.toString().endsWith("/")) {
+        if(uri.toString().endsWith("/")) {
             uri = uri.resolve("index.html");
         }
         String path = uri.getPath();
@@ -60,7 +60,7 @@ public class StaticFileServer {
         if (path.startsWith("/")) {
             local = new File("./client/", path.substring(1));
         }
-        System.out.print("GET \"" + uri + "\":");
+        System.out.print("GET \"" + path + "\":");
         if (local != null && local.exists()) {
             sendFile(t, local);
         } else {
@@ -70,7 +70,7 @@ public class StaticFileServer {
     }
 
     private static void send404Error(HttpExchange t, URI uri) throws IOException {
-        System.out.println(" Status=404");
+        System.out.print(" Status=404");
         String response = "File not found %s".formatted(uri);
         t.sendResponseHeaders(404, response.length());
         try (OutputStream os = t.getResponseBody()) {
@@ -94,5 +94,9 @@ public class StaticFileServer {
 
     public void stop() throws InterruptedException {
         server.stop(1000);
+    }
+
+    public static void startServerAt(int port) {
+        new StaticFileServer(port);
     }
 }

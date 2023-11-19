@@ -18,4 +18,8 @@ public class WaitingRoomPlayer {
     public Socket getSocket() {
         return socket;
     }
+
+    public String getName() {
+        return playerName;
+    }
 }

@@ -8,15 +8,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-/** A socket connection. The socket instance is guaranteed to be unique for each unique connection */
+/**
+ * A socket connection. The socket instance is guaranteed to be unique for each unique connection
+ */
 public class Socket {
     private WebSocket socket;
     private final Map<String, Object> data = new HashMap<>();
+
+    public boolean hasData(String key) {
+        return data.containsKey(key);
+    }
 
     @SuppressWarnings("unchecked")
     public <T> T getData(String key) {
         return (T) data.get(key);
     }
+
     public <T> void setData(String key, T value) {
         data.put(key, value);
     }
@@ -34,8 +41,11 @@ public class Socket {
     }
 
     public void emitEvent(String eventName, JsonObject data) {
+        if(data == null) data = new JsonObject();
         data.addProperty("eventName", eventName);
-        socket.send(data.toString());
+        if (socket.isOpen()) {
+            socket.send(data.toString());
+        }
     }
 
     public void closeConnection() {

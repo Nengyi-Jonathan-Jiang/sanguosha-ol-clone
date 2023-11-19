@@ -1,3 +1,4 @@
+import server.game.GameSocketListener;
 import server.waitingroom.WaitingRoomSocketListener;
 import socket.AbstractSocketListener;
 import socket.StaticFileServer;
@@ -12,12 +13,11 @@ public class Main {
         int waitingRoomWSPort = 8081;
         int gameWSPort = 8082;
 
-        StaticFileServer server = new StaticFileServer(port);
-
-        AbstractSocketListener waitingRoomSocketListener = new WaitingRoomSocketListener(waitingRoomWSPort);
-
-
         System.out.println("Starting server... ");
+
+        StaticFileServer.startServerAt(port);
+        AbstractSocketListener.startServerAt(WaitingRoomSocketListener::new, waitingRoomWSPort);
+        AbstractSocketListener.startServerAt(GameSocketListener::new, gameWSPort);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true) {

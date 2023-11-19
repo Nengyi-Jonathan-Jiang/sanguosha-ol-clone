@@ -8,16 +8,18 @@ class Socket {
 
     #eventLog = [];
 
+    #activePromises = [];
+
     /** @param {String} url */
     constructor(url) {
         this.#webSocket = new WebSocket(url);
         this.#handlers = new Map;
         this.#webSocket.onmessage = ({data}) => {
-            console.log("received " + data);
             let eventData = JSON.parse(data);
             this.#eventLog.push({out: false, data: eventData});
             let {eventName} = eventData;
             console.log(eventName, eventData);
+            this.#activePromises.forEach(i => i(eventData));
             if(this.#handlers.has(eventName)) {
                 this.#handlers.get(eventName)(eventData);
             }
@@ -42,10 +44,15 @@ class Socket {
 
     /**
      * @param {string} eventName
-     * @param {any} eventData
+     * @param {any} [eventData]
      */
-    emit(eventName, eventData) {
-        this.#eventLog.push({out: true, data: eventData});
-        this.#webSocket.send(JSON.stringify({...eventData, eventName}));
+    emit(eventName, eventData={}) {
+        let data = {...eventData, eventName};
+        this.#eventLog.push({out: true, data});
+        this.#webSocket.send(JSON.stringify(data));
+
+        return new Promise(resolve => {
+            this.#activePromises.push(data => resolve(data))
+        })
     }
 }

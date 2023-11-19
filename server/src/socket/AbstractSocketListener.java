@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -46,10 +47,10 @@ public abstract class AbstractSocketListener {
     }
 
     protected void broadcast(String eventName, JsonObject eventData) {
-        emitTo(wsServer.getConnections().stream().map(Socket::new).toList(), eventData, eventName);
+        broadcast(wsServer.getConnections().stream().map(Socket::new).toList(), eventName, eventData);
     }
 
-    protected void emitTo(Collection<Socket> sockets, JsonObject eventData, String eventName) {
+    protected void broadcast(Collection<Socket> sockets, String eventName, JsonObject eventData) {
         for (Socket s : sockets) {
             s.emitEvent(eventName, eventData);
         }
@@ -119,5 +120,9 @@ public abstract class AbstractSocketListener {
             setConnectionLostTimeout(0);
             setConnectionLostTimeout(100);
         }
+    }
+
+    public static void startServerAt(Function<Integer, AbstractSocketListener> startServer, int port) {
+        startServer.apply(port);
     }
 }

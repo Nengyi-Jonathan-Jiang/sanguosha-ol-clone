@@ -1,23 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Socket thingy?</title>
-        <link rel="stylesheet" type="text/css" href="/default.css"/>
-        <script src="socket.js"></script>
-        <script src="script.js"></script>
+        <meta charset="UTF-8">
+        <title>三国杀 | Waiting Room</title>
+        <script src="/socket.js"></script>
+        <style>
+            body {
+                background-color: #ccbb99;
+                margin:           0;
+                padding:          0;
+                height:           100vh;
+                display:          flex;
+                align-items:      center;
+                justify-content:  center;
+            }
+
+            h1 {
+                margin: 0 0 -5px;
+            }
+
+            div#main {
+                background-color: white;
+                height:           fit-content;
+                border-radius:    30px;
+                padding:          20px 15px;
+                text-align:       center;
+                font-size: 24px;
+                width: 350px;
+                font-family: Arial, serif;
+            }
+
+            div#main div div {
+                display: flex;
+                margin-top: 15px;
+                padding-right: 15px;
+            }
+
+            div#main div div input,
+            div#main div div button {
+                flex-grow: 1;
+                margin-left: 15px;
+                background-color: inherit;
+                border: 0;
+                border-radius: 0;
+                outline: none;
+                font: inherit;
+                text-align: center;
+                padding: 3px 8px;
+            }
+
+            div#main div div input {
+                width: 130px;
+                border-bottom: 1px solid black;
+            }
+
+            div#main div div button {
+                border: 1px solid black;
+                width: 140px;
+            }
+
+            div#players-list {
+                flex-direction: column;
+                position: relative;
+            }
+
+            div#players-list span {
+                flex-grow: 1;
+            }
+
+            div#players-list span[data-you]::after {
+                position: absolute;
+                content: "(You)";
+                color: #aaa;
+                right: 15px;
+            }
+        </style>
     </head>
     <body>
-        <h1>WebsocketBot</h1>
-        Your name: <input id="name" type="text" size="20" maxlength="20" onkeyup="checkJoin(event);"/>
-        <input type="submit" id="join" value="Join!" onclick="sendJoin();"/><br/>
-        <textarea id="input" cols="70" rows="1" disabled
-                  onkeyup="sendMessage(event);"></textarea><br/>
-        <textarea id="textarea" cols="70" rows="20" readonly></textarea>
-        <textarea id="userlist" cols="20" rows="20" readonly></textarea>
-        <br/><br/><br/>
-        <input id="showhideconsole" type="checkbox" onclick="showHideConsole();"/>
-        Show WebSocket console<br/>
-        <div id="consolediv"><textarea id="wsconsole" cols="80" rows="8" readonly
-                                       style="font-size:8pt;"></textarea></div>
+        <div id="main">
+            <h1>三国杀</h1>
+            <div id="ui-screen-1">
+                <div>
+                    <input id="name-input" type="text" placeholder="Name (Max 20 chars)" maxlength="20" required>
+                </div>
+                <div>
+                    <input id="room-id-input" placeholder="Game Code" maxlength="5">
+                    <button id="join-game-button">Join Game</button>
+                </div>
+                <div>
+                    <button id="create-game-button">Or create new game</button>
+                </div>
+            </div>
+            <div id="ui-screen-2" hidden>
+                <div>
+                    <span>Game code: <span id="room-id-display">XXXXX</span></span>
+                </div>
+                <div>
+                    <span>Players in game:</span>
+                </div>
+                <div id="players-list"></div>
+                <div>
+                    <button id="start-game-button">Start game</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            const socket = new Socket("ws://localhost:8081/");
+            /** @type {HTMLDivElement} */
+            const ui_screen_1 = document.getElementById('ui-screen-1');
+            /** @type {HTMLInputElement} */
+            const name_input = document.getElementById('name-input');
+            /** @type {HTMLInputElement} */
+            const room_id_input = document.getElementById('room-id-input');
+            /** @type {HTMLButtonElement} */
+            const join_game_button = document.getElementById('join-game-button');
+            /** @type {HTMLButtonElement} */
+            const create_game_button = document.getElementById('create-game-button');
+            /** @type {HTMLDivElement} */
+            const ui_screen_2 = document.getElementById('ui-screen-2');
+            /** @type {HTMLSpanElement} */
+            const room_id_display = document.getElementById('room-id-display');
+            /** @type {HTMLDivElement} */
+            const players_list = document.getElementById('players-list');
+            /** @type {HTMLButtonElement} */
+            const start_game_button = document.getElementById('start-game-button')
+
+            function handleJoinRoomSuccess({'player-id': player_id, 'room-id': room_id}, player_name){
+                sessionStorage.setItem('player-id', player_id);
+                sessionStorage.setItem('room-id', room_id);
+                sessionStorage.setItem('player-name', player_name);
+
+                room_id_display.innerText = room_id;
+
+                socket.addHandler('start-game', _ => {
+                    window.location = '/game';
+                })
+
+                start_game_button.onclick = _ => {
+                    socket.emit('request-start-game');
+                }
+
+                ui_screen_1.setAttribute('hidden', '');
+                ui_screen_2.removeAttribute('hidden');
+            }
+
+            join_game_button.onclick = async _ => {
+                const player_name = name_input.value;
+                if(player_name === '') return alert('Please enter a name')
+                const room_id = room_id_input.value;
+                if(room_id.length !== 5) {
+                    return alert('Please enter a 5-digit game code')
+                }
+                console.log('joining game...');
+                let response = await socket.emit('join-room', {'room-id' : room_id, 'player-name': player_name});
+                switch (response.eventName) {
+                    case 'join-room-error':
+                        alert('Invalid game code')
+                        break;
+                    case 'join-room-success':
+                        handleJoinRoomSuccess(response, player_name)
+                        break;
+                    default:
+                        alert('Something went wrong.')
+                }
+            }
+            create_game_button.onclick = async  _ => {
+                const player_name = name_input.value;
+                if(player_name === '') return alert('Please enter a name')
+                let response = await socket.emit('create-room', {'player-name': player_name});
+                switch (response.eventName) {
+                    case 'join-room-success':
+                        handleJoinRoomSuccess(response, player_name)
+                        break;
+                    default:
+                        alert('Something went wrong.')
+                }
+            }
+
+            socket.addHandler('update-player-list', ({'player-names': player_names}) => {
+                const player_name = sessionStorage.getItem('player-name')
+
+                while(players_list.firstChild) players_list.firstChild.remove();
+                for(let name of player_names) {
+                    const span = document.createElement('span');
+                    if(name === player_name) span.setAttribute('data-you', '')
+                    span.innerText = name;
+                    players_list.appendChild(span);
+                }
+            })
+        </script>
     </body>
 </html>
